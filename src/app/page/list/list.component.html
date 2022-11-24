@@ -1,0 +1,46 @@
+<h2>Movies list</h2>
+<div>
+    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('title')">Title sorter</button>
+    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('genre')">Genre sorter</button>
+    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('director')">Director sorter</button>
+    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('releaseYear')">ReleaseYear sorter</button>
+    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('studio')">Studio sorter</button>
+    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('active')">Active sorter</button>
+</div>
+
+<div class="input-group mb-3">
+    <div class="input-group-text filterselect">
+        <select [(ngModel)]="filterKey" class="form-control filterselect ">
+            <option value="">filter everywhere</option>
+            <option *ngFor="let col of columns" [value]="col.key">
+                {{ col.title }}
+            </option>
+        </select>
+    </div>
+    <input [(ngModel)]="phrase" class="form-control filterinput" type="text">
+</div>
+
+<div class="row mt-3 card-h 100">
+    <div class="col-12 col-md-6 col-xl-3 card-h 100"
+        *ngFor="let row of movie$ | async  | sorter: columnKey |filter:phrase:filterKey">
+        <div class="card mb-3 card-h 100" style="width: 18rem;">
+            <img [src]="row.poster" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Title: {{row.title}}</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Genre: {{row.genre}}</li>
+                    <li class="list-group-item">Director: {{row.director}}</li>
+                    <li class="list-group-item">ReleaseYear: {{row.releaseYear}}</li>
+                    <li class="list-group-item">Studio: {{row.studio}}</li>
+                    <li class="list-group-item">Active: {{row.active}}</li>
+                </ul>
+                <a [routerLink]="['/list/edit', row.id]" class="btn btn-primary mx-2">Edit
+                    <i class="fa fa-edit"></i>
+                </a>
+                <a (click)="onDelete(row)" class="btn btn-danger">Delete
+                    <i class="fa fa-trash"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
