@@ -21,8 +21,11 @@
 </div>
 
 <div class="row mt-3 card-h 100">
-    <div class="col-12 col-md-6 col-xl-3 card-h 100"
-        *ngFor="let row of movie$ | async  | sorter: columnKey |filter:phrase:filterKey">
+    <div class="col-12 col-md-6 col-xl-3 card-h 100" *ngFor="let row of movie$ | async 
+                                  |filter:phrase:filterKey 
+                                  | sorter: columnKey 
+                                  | slice:((currentPage-1)*pageSize):(currentPage*pageSize)">
+
         <div class="card mb-3 card-h 100" style="width: 18rem;">
             <img [src]="row.poster" class="card-img-top" alt="...">
             <div class="card-body">
@@ -42,5 +45,28 @@
                 </a>
             </div>
         </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" (click)="jumpBackward()">Previous</a></li>
+                <li *ngFor="let pageNum of getPageNumbers()" class="page-item">
+                    <div *ngIf="(pageNum==currentPage)">
+                        <a class="page-link" style="color: red;"  (click)="jumpToPage(pageNum)">
+                            {{ pageNum }}
+                        </a>
+                    </div>
+                    <div *ngIf="!(pageNum==currentPage)">
+                        <a class="page-link"  (click)="jumpToPage(pageNum)">
+                            {{ pageNum }}
+                        </a>
+                    </div>
+                </li>
+
+                <li class="page-item"><a class="page-link" (click)="jumpForvard()">Next</a></li>
+            </ul>
+        </nav>
     </div>
 </div>

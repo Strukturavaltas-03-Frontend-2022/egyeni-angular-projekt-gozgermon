@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Movie } from 'src/app/model/movie';
 import { MovieService } from 'src/app/service/movie.service';
@@ -15,48 +15,57 @@ interface ITableColumn {
 })
 export class ListComponent implements OnInit {
 
-movie$: Observable<Movie[]> = this.movieService.getAll();
+  movie$: Observable<Movie[]> = this.movieService.getAll();
 
-columnKey: string= "";
+  columnKey: string = "";
 
-//filter
-phrase: string = '';
+  //filter
+  phrase: string = '';
 
-filterKey: string = '';
+  filterKey: string = 'title';
 
-columns: ITableColumn[] = [
-  {
-    key: 'title',
-    title: 'Title',
-  },
-  {
-    key: 'genre',
-    title: 'Genre',
-  },
-  {
-    key: 'director',
-    title: 'Director',
-  },
-  {
-    key: 'releaseYear',
-    title: 'ReleaseYear',
-  },
-  {
-    key: 'studio',
-    title: 'Studio',
-  },
-  {
-    key: 'active',
-    title: 'Active',
-  },
+  //paginator
+  @Input() pageSize: number = 50;
 
-];
+  currentPage: number = 1;
+
+  Movielist: Movie[] | null = null;
+  getPageNumberSubState: Boolean = false;
+  filterPageList: Movie[] | null = null;
+
+  columns: ITableColumn[] = [
+    {
+      key: 'title',
+      title: 'Title',
+    },
+    {
+      key: 'genre',
+      title: 'Genre',
+    },
+    {
+      key: 'director',
+      title: 'Director',
+    },
+    {
+      key: 'releaseYear',
+      title: 'ReleaseYear',
+    },
+    {
+      key: 'studio',
+      title: 'Studio',
+    },
+    {
+      key: 'active',
+      title: 'Active',
+    },
+
+  ];
 
   constructor(
     private movieService: MovieService,
-  ) {}
+  ) { }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
   }
 
   onDelete(movie: Movie): void {
@@ -65,7 +74,51 @@ columns: ITableColumn[] = [
     );
   }
 
-  onColumnSelect(key: string):void{
-    this.columnKey= key
-   }
+  onColumnSelect(key: string): void {
+    this.columnKey = key
+  }
+
+  //paginator
+  getPageNumbers(): number[] {
+
+    if (!this.getPageNumberSubState) {
+      this.movie$.subscribe((data) => { this.Movielist = data })
+      this.getPageNumberSubState = true
+    }
+
+    if ((this.pageSize != 0)&&(this.Movielist!=null)) {
+      const pageCount: number = Math.ceil(this.Movielist!.length / this.pageSize);
+      let nums: number[] = [];
+      for (let i = 0; i < pageCount; i++) {
+        nums[i] = i + 1;
+      }
+      return nums;
+    }
+    else{
+      return []
+    }
+
+    
+  }
+
+  jumpToPage(pageNum: number): void {
+    this.currentPage = pageNum;
+  }
+
+  jumpForvard(): void {
+    if(this.currentPage<this.pageSize-1){
+      this.currentPage = this.currentPage+1;
+    }
+      
+    
+
+  }
+
+  jumpBackward(): void {
+    if(this.currentPage>1)
+    {
+    this.currentPage = this.currentPage - 1;
+    }
+  }
 }
+//| slice:((currentPage-1)*pageSize):(currentPage*pageSize)">
