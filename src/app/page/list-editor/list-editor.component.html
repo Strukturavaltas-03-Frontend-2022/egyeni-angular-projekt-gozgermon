@@ -1,1 +1,103 @@
-<p>list-editor works!</p>
+<div
+  class="row mt-3"
+  *ngIf="movie$ | async as movie"
+>
+  <div class="col-12">
+    <form
+      #movieEditorForm="ngForm"
+      (ngSubmit)="onUpdate(movie)"
+      style="max-width: 400px;"
+      class="mx-auto"
+    >
+    <div class="form-group">
+        <label>Title</label>
+        <input
+          name="title"
+          [(ngModel)]="movie.title"
+          type="text"
+          class="form-control"
+          pattern="^[A-Ű]{1}[A-Űa-Ű ,.0-9()?:&]{4,24}$"
+          required>
+        <div *ngIf="movieEditorForm.controls['title']?.invalid" class="error-message">
+          Please provide a title!
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Genre</label>
+        <input
+          name="genre"
+          [(ngModel)]="movie.genre"
+          type="text"
+          class="form-control"
+          required>
+        <div *ngIf="movieEditorForm.controls['genre']?.invalid" class="error-message">
+          Please provide a genre!
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Director</label>
+        <input
+          name="director"
+          [(ngModel)]="movie.director"
+          type="text"
+          class="form-control"
+          required>
+        <div *ngIf="movieEditorForm.controls['director']?.invalid" class="error-message">
+          Please provide a director!
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>ReleaseYear</label>
+        <input
+          name="releaseYear"
+          [(ngModel)]="movie.releaseYear"
+          type="text"
+          class="form-control"
+          pattern="^[1,2]{1}[0-9]{3}$"
+          required>
+        <div *ngIf="movieEditorForm.controls['releaseYear']?.invalid" class="error-message">
+          Please provide a 4 numbers!
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Studio</label>
+        <input
+          name="studio"
+          [(ngModel)]="movie.studio"
+          type="text"
+          class="form-control"
+          required>
+        <div *ngIf="movieEditorForm.controls['studio']?.invalid" class="error-message">
+          Please provide a studio!
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Active</label>
+        <input
+          name="active"
+          [(ngModel)]="movie.active"
+          type="text"
+          class="form-control"
+          required>
+        <div *ngIf="movieEditorForm.controls['active']?.invalid" class="error-message">
+          Please provide an active!
+        </div>
+      </div>
+
+      <div class="d-grid gap-2 mt-3">
+        <button
+          [disabled]="movieEditorForm.invalid"
+          class="btn btn-primary"
+          type="submit"
+        >
+          <i class="fa fa-save"></i> Update movie </button>
+      </div>
+    </form>
+  </div>
+</div>
+

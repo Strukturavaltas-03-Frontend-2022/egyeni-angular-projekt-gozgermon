@@ -1,7 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Movie } from 'src/app/model/movie';
 import { MovieService } from 'src/app/service/movie.service';
+import { FilterPipe } from 'src/app/pipe/filter.pipe'
+
 
 interface ITableColumn {
   title: string;
@@ -31,7 +33,7 @@ export class ListComponent implements OnInit {
 
   Movielist: Movie[] | null = null;
   getPageNumberSubState: Boolean = false;
-  filterPageList: Movie[] | null = null;
+  filterPipe = new FilterPipe()
 
   columns: ITableColumn[] = [
     {
@@ -61,7 +63,7 @@ export class ListComponent implements OnInit {
 
   ];
 
-  constructor(
+  constructor(private changeDet: ChangeDetectorRef,
     private movieService: MovieService,
   ) { }
 
@@ -86,19 +88,24 @@ export class ListComponent implements OnInit {
       this.getPageNumberSubState = true
     }
 
-    if ((this.pageSize != 0)&&(this.Movielist!=null)) {
-      const pageCount: number = Math.ceil(this.Movielist!.length / this.pageSize);
+    if ((this.pageSize != 0) && (this.Movielist != null)) {
+      let filteredList = this.filterPipe.transform(this.Movielist, this.phrase, this.filterKey)
+      const pageCount: number = Math.ceil(filteredList.length / this.pageSize);
+      if (pageCount < this.currentPage) {
+        this.currentPage = pageCount
+        this.changeDet.detectChanges()
+      }
       let nums: number[] = [];
       for (let i = 0; i < pageCount; i++) {
         nums[i] = i + 1;
       }
       return nums;
     }
-    else{
+    else {
       return []
     }
 
-    
+
   }
 
   jumpToPage(pageNum: number): void {
@@ -106,18 +113,17 @@ export class ListComponent implements OnInit {
   }
 
   jumpForvard(): void {
-    if(this.currentPage<this.pageSize-1){
-      this.currentPage = this.currentPage+1;
+    if (this.currentPage < this.pageSize - 1) {
+      this.currentPage = this.currentPage + 1;
     }
-      
-    
+
+
 
   }
 
   jumpBackward(): void {
-    if(this.currentPage>1)
-    {
-    this.currentPage = this.currentPage - 1;
+    if (this.currentPage > 1) {
+      this.currentPage = this.currentPage - 1;
     }
   }
 }
