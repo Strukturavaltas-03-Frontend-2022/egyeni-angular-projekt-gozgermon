@@ -1,14 +1,13 @@
 <div
   class="row mt-3"
-  *ngIf="movie$ | async as movie"
->
+  *ngIf="movie$ | async as movie">
   <div class="col-12">
     <form
       #movieEditorForm="ngForm"
-      (ngSubmit)="onUpdate(movie)"
+      (ngSubmit)="onUpdate(movieEditorForm, movie)"
       style="max-width: 400px;"
-      class="mx-auto"
-    >
+      class="mx-auto">
+      
     <div class="form-group">
         <label>Title</label>
         <input
@@ -19,7 +18,7 @@
           pattern="^[A-Ű]{1}[A-Űa-Ű ,.0-9()?:&]{4,24}$"
           required>
         <div *ngIf="movieEditorForm.controls['title']?.invalid" class="error-message">
-          Please provide a title!
+            The title must be minimum 5 maximum 25 characters long, and begins uppercase!
         </div>
       </div>
 
@@ -43,9 +42,10 @@
           [(ngModel)]="movie.director"
           type="text"
           class="form-control"
+          pattern="^[A-Ű]{1}[A-Űa-Ű ]{4,24}$"
           required>
         <div *ngIf="movieEditorForm.controls['director']?.invalid" class="error-message">
-          Please provide a director!
+            The title must be minimum 5 maximum 25 characters long, and begins uppercase!
         </div>
       </div>
 
@@ -59,7 +59,7 @@
           pattern="^[1,2]{1}[0-9]{3}$"
           required>
         <div *ngIf="movieEditorForm.controls['releaseYear']?.invalid" class="error-message">
-          Please provide a 4 numbers!
+          Please provide 4 numbers!
         </div>
       </div>
 
@@ -83,9 +83,10 @@
           [(ngModel)]="movie.active"
           type="text"
           class="form-control"
+          pattern="^[t,r,u,e,f,a,l,s]{4,5}$"
           required>
         <div *ngIf="movieEditorForm.controls['active']?.invalid" class="error-message">
-          Please provide an active!
+          Please provide true or false!
         </div>
       </div>
 

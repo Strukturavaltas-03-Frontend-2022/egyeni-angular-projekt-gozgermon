@@ -1,13 +1,17 @@
-<h2>Movies list</h2>
+<h2>Movie list</h2>
+
+<!--sorter-->
 <div>
-    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('title')">Title sorter</button>
-    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('genre')">Genre sorter</button>
-    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('director')">Director sorter</button>
-    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('releaseYear')">ReleaseYear sorter</button>
-    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('studio')">Studio sorter</button>
-    <button class="btn btn-primary mb-3 mx-1" (click)="onColumnSelect('active')">Active sorter</button>
+    <button class="btn btn-primary mb-3 mt-3 mx-1" (click)="onColumnSelect('title')">Title sorter</button>
+    <button class="btn btn-primary mb-3 mt-3 mx-1" (click)="onColumnSelect('genre')">Genre sorter</button>
+    <button class="btn btn-primary mb-3 mt-3 mx-1" (click)="onColumnSelect('director')">Director sorter</button>
+    <button class="btn btn-primary mb-3 mt-3 mx-1" (click)="onColumnSelect('releaseYear')">ReleaseYear sorter</button>
+    <button class="btn btn-primary mb-3 mt-3 mx-1" (click)="onColumnSelect('studio')">Studio sorter</button>
+    <button class="btn btn-primary mb-3 mt-3 mx-1" (click)="onColumnSelect('active')">Active sorter</button>
 </div>
 
+<!--filter-->
+<h5>Filter</h5>
 <div class="input-group mb-3">
     <div class="input-group-text filterselect">
         <select [(ngModel)]="filterKey" class="form-control filterselect ">
@@ -20,37 +24,42 @@
     <input [(ngModel)]="phrase" class="form-control filterinput" type="text">
 </div>
 
-<div class="row">
-    <div class="col-12">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" (click)="jumpBackward()">Previous</a></li>
-                <li *ngFor="let pageNum of getPageNumbers()" class="page-item">
-                    <div *ngIf="(pageNum==currentPage)">
-                        <a class="page-link" style="color:darkmagenta;background-color: lightgray;"  (click)="jumpToPage(pageNum)">
-                            {{ pageNum }}
-                        </a>
-                    </div>
-                    <div *ngIf="!(pageNum==currentPage)">
-                        <a class="page-link"  (click)="jumpToPage(pageNum)">
-                            {{ pageNum }}
-                        </a>
-                    </div>
-                </li>
+<!--new movie-->
+<a [routerLink]="['/list/edit/0']" class="btn btn-success my-2 mx-2">New movie
+    <i class="fa fa-pencil"></i>
+</a>
 
-                <li class="page-item"><a class="page-link" (click)="jumpForvard()">Next</a></li>
-            </ul>
-        </nav>
-    </div>
+<!--paginator-->
+<div class="d-flex justify-content-center ">
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" (click)="jumpBackward()">Previous</a></li>
+        <li *ngFor="let pageNum of getPageNumbers()" class="page-item">
+            <div *ngIf="(pageNum==currentPage)">
+                <a class="page-link" style="color:darkmagenta;background-color: lightgray;"
+                    (click)="jumpToPage(pageNum)">
+                    {{ pageNum }}
+                </a>
+            </div>
+            <div *ngIf="!(pageNum==currentPage)">
+                <a class="page-link" (click)="jumpToPage(pageNum)">
+                    {{ pageNum }}
+                </a>
+            </div>
+        </li>
+        <li class="page-item"><a class="page-link" (click)="jumpForvard()">Next</a></li>
+    </ul>
 </div>
 
-<div class="row mt-3 card-h 100">
-    <div class="col-12 col-md-6 col-xl-3 card-h 100" *ngFor="let row of movie$ | async 
+
+
+<!--list-->
+<div class="row mt-3 ">
+    <div class="col-12 col-md-6 col-xl-3 card-group" *ngFor="let row of movie$ | async 
                                   |filter:phrase:filterKey 
                                   | sorter: columnKey 
                                   | slice:((currentPage-1)*pageSize):(currentPage*pageSize)">
 
-        <div class="card mb-3 card-h 100" style="width: 18rem;">
+        <div class="card mb-3" style="width: 18rem;">
             <img [src]="row.poster" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">Title: {{row.title}}</h5>
@@ -71,26 +80,24 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-12">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" (click)="jumpBackward()">Previous</a></li>
-                <li *ngFor="let pageNum of getPageNumbers()" class="page-item">
-                    <div *ngIf="(pageNum==currentPage)">
-                        <a class="page-link" style="color: red;background-color: lightgray;"  (click)="jumpToPage(pageNum)">
-                            {{ pageNum }}
-                        </a>
-                    </div>
-                    <div *ngIf="!(pageNum==currentPage)">
-                        <a class="page-link"  (click)="jumpToPage(pageNum)">
-                            {{ pageNum }}
-                        </a>
-                    </div>
-                </li>
 
-                <li class="page-item"><a class="page-link" (click)="jumpForvard()">Next</a></li>
-            </ul>
-        </nav>
-    </div>
+<!--paginator-->
+<div class="d-flex justify-content-center ">
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" (click)="jumpBackward()">Previous</a></li>
+        <li *ngFor="let pageNum of getPageNumbers()" class="page-item">
+            <div *ngIf="(pageNum==currentPage)">
+                <a class="page-link" style="color:darkmagenta;background-color: lightgray;"
+                    (click)="jumpToPage(pageNum)">
+                    {{ pageNum }}
+                </a>
+            </div>
+            <div *ngIf="!(pageNum==currentPage)">
+                <a class="page-link" (click)="jumpToPage(pageNum)">
+                    {{ pageNum }}
+                </a>
+            </div>
+        </li>
+        <li class="page-item"><a class="page-link" (click)="jumpForvard()">Next</a></li>
+    </ul>
 </div>

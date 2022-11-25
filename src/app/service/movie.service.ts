@@ -8,7 +8,7 @@ import { Movie } from '../model/movie';
   providedIn: 'root'
 })
 export class MovieService {
-  
+
   apiUrl: string = environment.apiUrl;
 
   entityName: string = 'cinema';
@@ -21,27 +21,33 @@ export class MovieService {
     return this.http.get<Movie[]>(`${this.apiUrl}${this.entityName}`);
   }
 
-  get(id: number): Observable<Movie> {
+  get(id: number): Observable<Movie>{
+    if(id== 0) {
+      console.log('sdfgh')
+    return new Observable<Movie>((observer) => { observer.next(new Movie()) });
+    }
+    console.log(id)
+    console.log('aaaaaaaaa')
     return this.http.get<Movie>(`${this.apiUrl}${this.entityName}/${id}`);
   }
 
-  update(movie: Movie): Observable<Movie> {
-    return this.http.patch<Movie>(
-      `${this.apiUrl}${this.entityName}/${movie.id}`,
-      movie
-    );
-  }
+update(movie: Movie): Observable < Movie > {
+  return this.http.patch<Movie>(
+    `${this.apiUrl}${this.entityName}/${movie.id}`,
+    movie
+  );
+}
 
-  create(movie: Movie): Observable<Movie> {
-    return this.http.post<Movie>(
-      `${this.apiUrl}${this.entityName}`,
-      movie
-    );
-  }
+create(movie: Movie): Observable < Movie > {
+  return this.http.post<Movie>(
+    `${this.apiUrl}${this.entityName}`,
+    movie
+  );
+}
 
-  delete(movie: Movie): Observable<Movie> {
-    return this.http.delete<Movie>(
-      `${this.apiUrl}${this.entityName}/${movie.id}`
-    );
-  }
+delete (movie: Movie): Observable < Movie > {
+  return this.http.delete<Movie>(
+    `${this.apiUrl}${this.entityName}/${movie.id}`
+  );
+}
 }

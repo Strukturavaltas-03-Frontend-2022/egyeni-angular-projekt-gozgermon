@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Movie } from 'src/app/model/movie';
 import { MovieService } from 'src/app/service/movie.service';
 import { FilterPipe } from 'src/app/pipe/filter.pipe'
+import { Router } from '@angular/router';
 
 
 interface ITableColumn {
@@ -65,6 +66,7 @@ export class ListComponent implements OnInit {
 
   constructor(private changeDet: ChangeDetectorRef,
     private movieService: MovieService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -104,8 +106,6 @@ export class ListComponent implements OnInit {
     else {
       return []
     }
-
-
   }
 
   jumpToPage(pageNum: number): void {
@@ -116,9 +116,6 @@ export class ListComponent implements OnInit {
     if (this.currentPage < this.pageSize - 1) {
       this.currentPage = this.currentPage + 1;
     }
-
-
-
   }
 
   jumpBackward(): void {
@@ -127,4 +124,3 @@ export class ListComponent implements OnInit {
     }
   }
 }
-//| slice:((currentPage-1)*pageSize):(currentPage*pageSize)">
